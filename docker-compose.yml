@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: sprintdesk
+      POSTGRES_PASSWORD: sprintdesk
+      POSTGRES_DB: sprintdesk
+    ports:
+      - "5433:5432"
+    volumes:
+      - sprintdesk_pg:/var/lib/postgresql/data
+volumes:
+  sprintdesk_pg:

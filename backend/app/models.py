@@ -40,7 +40,12 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     hashed_password: Mapped[str] = mapped_column(String(255))
     display_name: Mapped[str] = mapped_column(String(120), default="")
-    assigned_tickets: Mapped[list["Ticket"]] = relationship(back_populates="assignee")
+    assigned_tickets: Mapped[list["Ticket"]] = relationship(
+        back_populates="assignee", foreign_keys="Ticket.assignee_id"
+    )
+    reported_tickets: Mapped[list["Ticket"]] = relationship(
+        foreign_keys="Ticket.reporter_id"
+    )
     comments: Mapped[list["Comment"]] = relationship(back_populates="author")
 
 
@@ -85,7 +90,10 @@ class Ticket(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     project: Mapped[Project] = relationship(back_populates="tickets")
     sprint: Mapped[Sprint | None] = relationship(back_populates="tickets")
-    assignee: Mapped[User | None] = relationship(back_populates="assigned_tickets", foreign_keys=[assignee_id])
+    assignee: Mapped[User | None] = relationship(
+        back_populates="assigned_tickets", foreign_keys=[assignee_id]
+    )
+    reporter: Mapped[User] = relationship(foreign_keys=[reporter_id])
     comments: Mapped[list["Comment"]] = relationship(back_populates="ticket")
     attachments: Mapped[list["Attachment"]] = relationship(back_populates="ticket")
 

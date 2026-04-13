@@ -18,7 +18,7 @@ def assert_safe_upload(file: UploadFile, raw: bytes) -> None:
     if len(raw) == 0:
         raise HTTPException(status_code=400, detail="empty file")
     if len(raw) > settings.max_upload_bytes:
-        raise HTTPException(status_code=400, "file too large")
+        raise HTTPException(status_code=400, detail="file too large")
     mime = (file.content_type or "").split(";")[0].strip().lower()
     if mime not in settings.allowed_mime:
         raise HTTPException(status_code=400, detail=f"mime not allowed: {mime}")
